@@ -1,0 +1,56 @@
+#! /usr/bin/fish
+set num (count $argv)
+if [ $num -lt 1 ]; 
+    echo "安装: $0 run"
+    echo "启动: $0 start"
+    echo "停止: $0 stop"
+    exit 1
+end
+set flag $argv[1]
+set ID (echo "123456" | sudo -S docker ps -a|grep bestwu/wechat|awk '{print $1}') 
+
+function run
+
+    if [ $ID != "" ]; 
+        echo "123456" | sudo -S docker rm $ID
+    end
+
+    set -Ux  set DISPLAY unix$DISPLAY 
+    set -Ux  set XMODIFIERS=@im fcitx 
+    set -Ux  set QT_IM_MODULE fcitx 
+    set -Ux  set GTK_IM_MODULE fcitx 
+    set -Ux  set AUDIO_GID (getent group audio | cut -d: -f3) 
+    set -Ux  set GID (id -g) 
+    set -Ux  set UID (id -u) 
+    echo "123456" | sudo -S docker run -d --ipc=host --name wechat --device /dev/snd \
+       -v /tmp/.X11-unix:/tmp/.X11-unix \
+       -v $HOME/cache/wechat/WeChatFiles:/WeChatFiles \
+       bestwu/wechat
+end
+
+function start
+
+    echo "123456" | sudo -S docker start $ID
+
+end
+
+function stop
+    echo "123456" | sudo -S docker stop $ID
+end
+
+function main
+
+    if [ $flag = "run" ]; 
+        run
+    else if [ $flag = "start" ]; 
+        start
+    else if [ $flag = "stop" ]; 
+        stop
+    else
+        echo "输入有误，请重新输入！"
+    end
+
+end
+
+###################################################
+main 

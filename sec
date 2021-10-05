@@ -1,0 +1,17 @@
+#! /usr/bin/fish
+set num (count $argv)
+if [ $num -lt 1 ]
+    set sec 30
+else
+    set sec $argv[1]
+end
+while true
+    if [ $sec -lt 1 ]
+        echo -e "\a"
+        exit 1
+    end
+    clear
+    echo $sec
+    set sec (math "$sec - 1")
+    sleep 1
+end

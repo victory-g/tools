@@ -1,0 +1,41 @@
+#!/bin/bash
+# /usr/share/X11/xkb/keycodes/evdev
+# <CAPS> = 66;
+# <LCTL> = 37;
+
+if [ $# -lt 1 ]; then
+    echo $0 0 normal
+    echo $0 1 change
+    exit 1
+fi
+filename="/usr/share/X11/xkb/keycodes/evdev"
+pass="123456"
+if [ ! -f $filename ]; then
+    echo $pass | sudo -S cp $filename {$filename}_b
+fi
+
+function normal
+{
+    echo $pass | sudo -S sed -i s/'<CAPS> = 37;'/'<CAPS> = 66;'/g $filename
+    echo $pass | sudo -S sed -i s/'<LCTL> = 66;'/'<LCTL> = 37;'/g $filename
+}
+
+function change
+{
+    echo $pass | sudo -S sed -i s/'<CAPS> = 66;'/'<CAPS> = 37;'/g $filename
+    echo $pass | sudo -S sed -i s/'<LCTL> = 37;'/'<LCTL> = 66;'/g $filename
+}
+
+function main
+{
+    if [ $1 -eq 0 ]; then
+        normal
+    elif [ $1 -eq 1 ]; then
+        change
+    else
+        echo $0 0 normal
+        echo $0 1 change
+    fi
+}
+# =====================================================
+main $@

@@ -1,0 +1,52 @@
+#! /bin/bash
+if [ $# -lt 1 ]; then
+ echo "安装: $0 run"
+ echo "启动: $0 start"
+ echo "停止: $0 stop"
+fi
+flag=$1
+ID=`echo "123456" | sudo -S docker ps -a|grep bestwu/wechat|awk '{print $1}'`
+
+function run()
+{
+ if [ ! -z $ID ]; then
+  echo "123456" | sudo -S docker rm $ID
+ fi
+ echo "123456" | sudo -S docker run -d --ipc=host --name wechat --device /dev/snd \
+ -v /tmp/.X11-unix:/tmp/.X11-unix \
+ -v $HOME/cache/wechat/WeChatFiles:/WeChatFiles \
+ -e DISPLAY=unix$DISPLAY \
+ -e XMODIFIERS=@im=fcitx \
+ -e QT_IM_MODULE=fcitx \
+ -e GTK_IM_MODULE=fcitx \
+ -e AUDIO_GID=`getent group audio | cut -d: -f3` \
+ -e GID=`id -g` \
+ -e UID=`id -u` \
+ bestwu/wechat
+}
+
+function start()
+{
+ echo "123456" | sudo -S docker start ${ID}
+}
+
+function stop()
+{
+    echo "123456" | sudo -S docker stop ${ID}
+}
+
+function main()
+{
+    if [[ $flag == "run" ]]; then
+        run
+    elif [[ $flag == "start" ]]; then
+        start
+    elif [[ $flag == "stop" ]]; then
+        stop
+    else
+        echo "输入有误，请重新输入！"
+    fi
+}
+
+###################################################
+main
