@@ -1,0 +1,14 @@
+#! /usr/bin/fish
+set num (count $argv)
+if [ $num -lt 1 ];
+    echo "delete file: d"
+    echo "delete dir:  f"
+    exit 1;
+end
+if [ $argv[1] = "d" ];
+    ls|grep -Ev '(\.c|\.h|\.a|\.so|tags|\.o|\.cpp|\.go|\.py|\.html|\.java|\.php|\.md|\.lua|\.css|\.js|\.txt)'|xargs rm -rf
+else if [ $argv[1] = "f" ];
+    find ./ -type f -not -name "*.*" -not -name "tags" |xargs rm -f
+else
+    echo d or f
+end
