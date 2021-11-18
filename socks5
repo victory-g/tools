@@ -1,0 +1,15 @@
+#! /usr/bin/fish
+set num (count $argv)
+if [ $num -lt 1  ];
+    echo normal: socks5 0
+    echo change: socks5 1
+    exit 1
+end
+set flag $argv[1]
+if [ $flag = 1 ]
+    set -gx http_proxy "http://127.0.0.1:8889"
+    set -gx https_proxy "http://127.0.0.1:8889"
+else if [ $flag = 0 ]
+    set -ge http_proxy 
+    set -ge https_proxy 
+end
