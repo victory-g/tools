@@ -1,0 +1,19 @@
+#!/bin/bash
+if [ $# = 0 ]; then
+    echo $0 hold
+    echo $0 install
+elif [ $1 = "see" ]; then
+sudo dpkg --get-selections | grep hold 
+elif [ $1 = "hold" ];then
+    sudo echo linux-headers-5.15.3-surface  hold | sudo dpkg --set-selections
+    sudo echo linux-headers-surface         hold | sudo dpkg --set-selections
+    sudo echo linux-image-5.15.3-surface    hold | sudo dpkg --set-selections
+    sudo echo linux-image-surface           hold | sudo dpkg --set-selections
+    sudo echo libwacom-surface              hold | sudo dpkg --set-selections
+elif [ $1 = "install" ]; then
+    sudo echo linux-headers-5.15.3-surface  install | sudo dpkg --set-selections
+    sudo echo linux-headers-surface         install | sudo dpkg --set-selections
+    sudo echo linux-image-5.15.3-surface    install | sudo dpkg --set-selections
+    sudo echo linux-image-surface           install | sudo dpkg --set-selections
+    sudo echo libwacom-surface              install | sudo dpkg --set-selections
+fi
